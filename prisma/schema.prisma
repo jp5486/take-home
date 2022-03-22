@@ -10,10 +10,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 model Person {
-  id        Int @default(autoincrement()) @id
-  firstName String
-  lastName  String
+  id        Int         @default(autoincrement())
+  firstName String      @map(name: "first_name")
+  lastName  String      @map(name: "last_name")
   email     String
   address   String?
-  version   Int
+  version   Int         @default(autoincrement())
+  deletedAt DateTime?   @map(name: "deleted_at")
+
+  @@map(name: "persons")
+
+  //Primary Composite Key with version
+  // https://github.com/prisma/specs/tree/master/schema#referencing-primary-composite-keys
+  @@id([id,version])
 }
