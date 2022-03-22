@@ -15,7 +15,7 @@ model Person {
   lastName  String      @map(name: "last_name")
   email     String
   address   String?
-  version   Int         @default(autoincrement())
+  version   Int         @default(1)
   deletedAt DateTime?   @map(name: "deleted_at")
 
   @@map(name: "persons")

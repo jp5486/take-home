@@ -43,11 +43,11 @@ export class PersonsService {
     return latestPersonArr?.[0];
   }
 
-  // async createPerson(data: Prisma.PersonCreateInput): Promise<Person> {
-  //   return this.prisma.person.create({
-  //     data,
-  //   });
-  // }
+  async createPerson(data: Prisma.PersonCreateInput): Promise<Person> {
+    return this.prisma.person.create({
+      data,
+    });
+  }
 
   // async updatePerson(params: {
   //   where: Prisma.PersonWhereUniqueInput;
