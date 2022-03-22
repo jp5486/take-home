@@ -64,16 +64,16 @@ export class PersonsService {
   async deletePerson(id: number): Promise<Person> {
     const target = await this.latestPerson(id);
 
-    // if (target == undefined) {
-    //   console.log('unable to find person by id');
-    //   return undefined;
-    // }
+    if (target == undefined) {
+      console.log('unable to find person by id');
+      return undefined;
+    }
 
-    // if (target.deletedAt !== null) {
-    //   console.log(target);
-    //   console.log('unable to delete person');
-    //   return null;
-    // }
+    if (target.deletedAt !== null) {
+      console.log(target);
+      console.log('unable to delete person');
+      return null;
+    }
 
     let newVersion = target.version + 1;
 
@@ -90,18 +90,6 @@ export class PersonsService {
     });
   }
 
-  // basic update
-  // async updatePerson(params: {
-  //   where: Prisma.PersonWhereUniqueInput;
-  //   data: Prisma.PersonUpdateInput;
-  // }): Promise<Person> {
-  //   const { where, data } = params;
-  //   return this.prisma.person.update({
-  //     data,
-  //     where,
-  //   });
-  // }
-
   // Update Person creates a new instance of the Person Object
   // Update only updated the newest version of a person Object
   // uses the available data to update if available
@@ -112,15 +100,15 @@ export class PersonsService {
   }): Promise<Person> {
     const target = await this.latestPerson(params.id);
 
-    // if (target == undefined) {
-    //   console.log('unable to find person by id');
-    //   return undefined;
-    // }
+    if (target == undefined) {
+      console.log('unable to find person by id');
+      return undefined;
+    }
 
-    // if (!target) {
-    //   console.log('unable to update person');
-    //   return null;
-    // }
+    if (!target) {
+      console.log('unable to update person');
+      return null;
+    }
 
     return this.prisma.person.create({
       data: {

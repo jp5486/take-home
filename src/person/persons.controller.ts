@@ -1,6 +1,5 @@
 import {
   Body,
-  ConsoleLogger,
   Controller,
   Delete,
   ForbiddenException,
@@ -24,17 +23,6 @@ interface PersonProfile {
 @Controller()
 export class PersonsController {
   constructor(private readonly personService: PersonsService) {}
-
-  // @Get('person')
-  // async getPersonById(
-  //   @Body()
-  //   data: {
-  //     id: number;
-  //   },
-  // ): Promise<PersonProfile> {
-  //   const target = await this.personService.person(data.id);
-  //   return target;
-  // }
 
   @Get('/personById')
   async getPersonById(
@@ -130,19 +118,18 @@ export class PersonsController {
       id: number;
     },
   ): Promise<PersonModel> {
-    // can delete the same person twice
     const tryDelete = await this.personService.deletePerson(data.id);
 
-    // if (tryDelete == undefined) {
-    //   console.log('unable to find person with that ID');
-    //   throw new NotFoundException();
-    // }
+    if (tryDelete == undefined) {
+      console.log('unable to find person with that ID');
+      throw new NotFoundException();
+    }
 
-    // // check for deletedAt field first
-    // if (tryDelete == null) {
-    //   console.log('User has already been deleted');
-    //   throw new ForbiddenException();
-    // }
+    // check for deletedAt field first
+    if (tryDelete == null) {
+      console.log('User has already been deleted');
+      throw new ForbiddenException();
+    }
     return tryDelete;
   }
 
@@ -157,16 +144,6 @@ export class PersonsController {
       email?: string;
     },
   ): Promise<PersonModel> {
-    // return this.personService.updatePerson({
-    //   id: data.id,
-    //   data: {
-    //     firstName: data.firstName,
-    //     lastName: data.lastName,
-    //     address: data.address,
-    //     email: data.email,
-    //   },
-    // });
-
     const tryUpdate = this.personService.updatePerson({
       id: data.id,
       data: {
@@ -177,15 +154,15 @@ export class PersonsController {
       },
     });
 
-    // if (tryUpdate == undefined) {
-    //   console.log('Unable to find person with that ID');
-    //   throw new NotFoundException();
-    // }
+    if (tryUpdate == undefined) {
+      console.log('Unable to find person with that ID');
+      throw new NotFoundException();
+    }
 
-    // if (tryUpdate == null) {
-    //   console.log('Unable to update person');
-    //   throw new ForbiddenException();
-    // }
+    if (tryUpdate == null) {
+      console.log('Unable to update person');
+      throw new ForbiddenException();
+    }
     return tryUpdate;
   }
 }
