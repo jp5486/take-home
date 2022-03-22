@@ -1,12 +1,15 @@
 import {
   Body,
+  ConsoleLogger,
   Controller,
+  Delete,
   ForbiddenException,
   Get,
   NotFoundException,
   Post,
+  Put,
 } from '@nestjs/common';
-import { Person, Prisma } from '@prisma/client';
+import { Person as PersonModel } from '@prisma/client';
 import { PersonsService } from './persons.service';
 
 interface PersonProfile {
@@ -43,6 +46,7 @@ export class PersonsController {
     const person = await this.personService.latestPerson(data.id);
 
     if (!person) {
+      console.log('Unable to find person');
       throw new NotFoundException();
     }
 
@@ -72,6 +76,7 @@ export class PersonsController {
     });
 
     if (!person) {
+      console.log('Unable to find person');
       throw new NotFoundException();
     }
 
@@ -105,6 +110,7 @@ export class PersonsController {
     const newPerson = await this.personService.createPerson(data);
 
     if (!newPerson) {
+      console.log('Unable to create person');
       throw new ForbiddenException();
     }
 
@@ -115,5 +121,71 @@ export class PersonsController {
       address: newPerson.address,
       version: newPerson.version,
     };
+  }
+
+  @Delete('/person')
+  async deletePerson(
+    @Body()
+    data: {
+      id: number;
+    },
+  ): Promise<PersonModel> {
+    // can delete the same person twice
+    const tryDelete = await this.personService.deletePerson(data.id);
+
+    // if (tryDelete == undefined) {
+    //   console.log('unable to find person with that ID');
+    //   throw new NotFoundException();
+    // }
+
+    // // check for deletedAt field first
+    // if (tryDelete == null) {
+    //   console.log('User has already been deleted');
+    //   throw new ForbiddenException();
+    // }
+    return tryDelete;
+  }
+
+  @Put('/person')
+  async updatePerson(
+    @Body()
+    data: {
+      id: number;
+      firstName?: string;
+      lastName?: string;
+      address?: string;
+      email?: string;
+    },
+  ): Promise<PersonModel> {
+    // return this.personService.updatePerson({
+    //   id: data.id,
+    //   data: {
+    //     firstName: data.firstName,
+    //     lastName: data.lastName,
+    //     address: data.address,
+    //     email: data.email,
+    //   },
+    // });
+
+    const tryUpdate = this.personService.updatePerson({
+      id: data.id,
+      data: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        address: data.address,
+        email: data.email,
+      },
+    });
+
+    // if (tryUpdate == undefined) {
+    //   console.log('Unable to find person with that ID');
+    //   throw new NotFoundException();
+    // }
+
+    // if (tryUpdate == null) {
+    //   console.log('Unable to update person');
+    //   throw new ForbiddenException();
+    // }
+    return tryUpdate;
   }
 }
