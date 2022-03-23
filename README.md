@@ -7,6 +7,7 @@ Person API Take home
 
 ```bash
 $ yarn
+$ npx prisma migrate dev
 
 ```
 
