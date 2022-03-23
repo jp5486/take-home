@@ -1,24 +1,22 @@
 import {
   Body,
-  Controller,
-  Delete,
-  ForbiddenException,
   Get,
-  NotFoundException,
   Post,
   Put,
+  Delete,
+  Controller,
+  ForbiddenException,
+  NotFoundException,
 } from '@nestjs/common';
+import {
+  CreatePersonDto,
+  GetPersonByIdDto,
+  GetPersonByIdVersionDto,
+  UpdatePersonDto,
+  PersonProfile,
+} from './persons.dto';
 import { Person as PersonModel } from '@prisma/client';
 import { PersonsService } from './persons.service';
-
-interface PersonProfile {
-  firstName: string;
-  lastName: string;
-  email: string;
-  address: string;
-  deletedAt: Date;
-  version: number;
-}
 
 @Controller()
 export class PersonsController {
@@ -27,9 +25,7 @@ export class PersonsController {
   @Get('/personById')
   async getPersonById(
     @Body()
-    data: {
-      id: number;
-    },
+    data: GetPersonByIdDto,
   ): Promise<PersonProfile> {
     const person = await this.personService.latestPerson(data.id);
 
@@ -51,10 +47,7 @@ export class PersonsController {
   @Get('/personVersioned')
   async getPersonVersioned(
     @Body()
-    data: {
-      id: number;
-      version: number;
-    },
+    data: GetPersonByIdVersionDto,
   ): Promise<PersonProfile> {
     const person = await this.personService.person({
       id_version: {
@@ -68,33 +61,15 @@ export class PersonsController {
       throw new NotFoundException();
     }
 
-    return {
-      firstName: person.firstName,
-      lastName: person.lastName,
-      email: person.email,
-      address: person.address,
-      deletedAt: person.deletedAt,
-      version: person.version,
-    };
+    return person;
   }
 
   // create new person
   @Post('/person')
   async register(
     @Body()
-    data: {
-      firstName: string;
-      lastName: string;
-      email: string;
-      address: string;
-    },
-  ): Promise<{
-    firstName: string;
-    lastName: string;
-    email: string;
-    address: string;
-    version: number;
-  }> {
+    data: CreatePersonDto,
+  ): Promise<PersonModel> {
     const newPerson = await this.personService.createPerson(data);
 
     if (!newPerson) {
@@ -102,21 +77,13 @@ export class PersonsController {
       throw new ForbiddenException();
     }
 
-    return {
-      firstName: newPerson.firstName,
-      lastName: newPerson.lastName,
-      email: newPerson.email,
-      address: newPerson.address,
-      version: newPerson.version,
-    };
+    return newPerson;
   }
 
   @Delete('/person')
   async deletePerson(
     @Body()
-    data: {
-      id: number;
-    },
+    data: GetPersonByIdDto,
   ): Promise<PersonModel> {
     const tryDelete = await this.personService.deletePerson(data.id);
 
@@ -136,13 +103,7 @@ export class PersonsController {
   @Put('/person')
   async updatePerson(
     @Body()
-    data: {
-      id: number;
-      firstName?: string;
-      lastName?: string;
-      address?: string;
-      email?: string;
-    },
+    data: UpdatePersonDto,
   ): Promise<PersonModel> {
     const tryUpdate = this.personService.updatePerson({
       id: data.id,
