@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"firstName\": \"Samantha\",\n    \"lastName\": \"Smith\",\n    \"email\": \"SS@gmail.com\",\n    \"address\": \"nothing here\"\n}",
+					"raw": "{\n    \"firstName\": \"sammy\",\n    \"lastName\": \"Smith\",\n    \"email\": \"SS@gmail.com\",\n    \"address\": \"nothing here\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -35,23 +35,11 @@
 		},
 		{
 			"name": "Get Person by ID",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"id\": 1\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "http://localhost:3001/personById",
+					"raw": "http://localhost:3001/personById?id=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -59,6 +47,12 @@
 					"port": "3001",
 					"path": [
 						"personById"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
 					]
 				}
 			},
@@ -66,23 +60,11 @@
 		},
 		{
 			"name": "Get Person Versioned",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"id\": 10,\n    \"version\": 2\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "http://localhost:3001/personVersioned",
+					"raw": "http://localhost:3001/personVersioned?id=1&version=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -90,6 +72,16 @@
 					"port": "3001",
 					"path": [
 						"personVersioned"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						},
+						{
+							"key": "version",
+							"value": "1"
+						}
 					]
 				}
 			},
