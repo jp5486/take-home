@@ -7,9 +7,16 @@ Person API Take home
 
 ```bash
 $ yarn
-$ npx prisma migrate dev
+$ cp sample.env .env  
 
 ```
+
+ENSURE database credentials are accurate for your system
+
+```bash
+$ npx prisma migrate dev
+```
+
 
 ## Running the app
 
