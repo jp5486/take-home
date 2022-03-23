@@ -17,6 +17,12 @@ $ yarn start
 
 ```
 
+## Postman
+
+Postman Collection available in root directory:
+
+PersonAPI.postman_collection.json
+
 ## Routes
 
 ```bash
