@@ -7,6 +7,7 @@ import {
   Controller,
   ForbiddenException,
   NotFoundException,
+  Query,
 } from '@nestjs/common';
 import {
   CreatePersonDto,
@@ -14,6 +15,7 @@ import {
   GetPersonByIdVersionDto,
   UpdatePersonDto,
   PersonProfile,
+  DeletePersonByIdDto,
 } from './persons.dto';
 import { Person as PersonModel } from '@prisma/client';
 import { PersonsService } from './persons.service';
@@ -24,10 +26,10 @@ export class PersonsController {
 
   @Get('/personById')
   async getPersonById(
-    @Body()
+    @Query()
     data: GetPersonByIdDto,
   ): Promise<PersonProfile> {
-    const person = await this.personService.latestPerson(data.id);
+    const person = await this.personService.latestPerson(parseInt(data.id));
 
     if (!person) {
       console.log('Unable to find person');
@@ -39,13 +41,13 @@ export class PersonsController {
 
   @Get('/personVersioned')
   async getPersonVersioned(
-    @Body()
+    @Query()
     data: GetPersonByIdVersionDto,
   ): Promise<PersonProfile> {
     const person = await this.personService.person({
       id_version: {
-        id: data.id,
-        version: data.version,
+        id: parseInt(data.id),
+        version: parseInt(data.version),
       },
     });
 
@@ -76,7 +78,7 @@ export class PersonsController {
   @Delete('/person')
   async deletePerson(
     @Body()
-    data: GetPersonByIdDto,
+    data: DeletePersonByIdDto,
   ): Promise<PersonModel> {
     const tryDelete = await this.personService.deletePerson(data.id);
 

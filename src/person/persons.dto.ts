@@ -1,4 +1,10 @@
-import { IsEmail, IsInt, IsOptional, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsInt,
+  IsNumberString,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreatePersonDto {
   @IsEmail()
@@ -16,16 +22,21 @@ export class CreatePersonDto {
 }
 
 export class GetPersonByIdDto {
+  @IsNumberString()
+  id!: string;
+}
+
+export class DeletePersonByIdDto {
   @IsInt()
   id!: number;
 }
 
 export class GetPersonByIdVersionDto {
-  @IsInt()
-  id!: number;
+  @IsNumberString()
+  id!: string;
 
-  @IsInt()
-  version!: number;
+  @IsNumberString()
+  version!: string;
 }
 
 export class UpdatePersonDto {
