@@ -34,14 +34,7 @@ export class PersonsController {
       throw new NotFoundException();
     }
 
-    return {
-      firstName: person.firstName,
-      lastName: person.lastName,
-      email: person.email,
-      address: person.address,
-      deletedAt: person.deletedAt,
-      version: person.version,
-    };
+    return person;
   }
 
   @Get('/personVersioned')
