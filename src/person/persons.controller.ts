@@ -5,10 +5,10 @@ import {
   Put,
   Delete,
   Controller,
-  ForbiddenException,
   NotFoundException,
   Query,
   ConflictException,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   CreatePersonDto,
@@ -20,9 +20,11 @@ import {
 import { Person } from './entities/person.entity';
 import { PersonsService } from './persons.service';
 import {
+  ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -73,6 +75,10 @@ export class PersonsController {
 
   // create new person
   @ApiCreatedResponse({ type: Person })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: 'Unable to create person',
+  })
   @Post('/person')
   async register(
     @Body()
@@ -82,7 +88,7 @@ export class PersonsController {
 
     if (!newPerson) {
       console.log('Unable to create person');
-      throw new ForbiddenException();
+      throw new BadRequestException();
     }
 
     return newPerson;
@@ -116,8 +122,8 @@ export class PersonsController {
 
   @ApiCreatedResponse({ type: Person })
   @ApiNotFoundResponse({ status: 404, description: 'Unable to find person' })
-  @ApiResponse({
-    status: 403,
+  @ApiBadRequestResponse({
+    status: 400,
     description: 'Unable to update person',
   })
   @Put('/person')
@@ -142,7 +148,7 @@ export class PersonsController {
 
     if (tryUpdate == null) {
       console.log('Unable to update person');
-      throw new ForbiddenException();
+      throw new BadRequestException();
     }
     return tryUpdate;
   }
