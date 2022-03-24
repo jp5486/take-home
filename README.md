@@ -52,3 +52,10 @@ requires: id (number)
 optional: firstName, lastName, email (strings)
 
 ```
+
+## Swagger Documentation
+
+```http
+localhost:3001
+
+```

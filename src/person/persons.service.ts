@@ -69,10 +69,9 @@ export class PersonsService {
       return undefined;
     }
 
-    if (target.deletedAt !== null) {
-      console.log(target);
+    if (target.deletedAt) {
       console.log('unable to delete person');
-      return null;
+      return target;
     }
 
     let newVersion = target.version + 1;
