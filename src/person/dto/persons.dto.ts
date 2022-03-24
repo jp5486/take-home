@@ -59,12 +59,3 @@ export class UpdatePersonDto {
   @IsInt()
   id!: number;
 }
-
-export interface PersonProfile {
-  firstName: string;
-  lastName: string;
-  email: string;
-  address: string;
-  deletedAt: Date;
-  version: number;
-}

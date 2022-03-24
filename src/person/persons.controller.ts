@@ -14,10 +14,9 @@ import {
   GetPersonByIdDto,
   GetPersonByIdVersionDto,
   UpdatePersonDto,
-  PersonProfile,
   DeletePersonByIdDto,
-} from './persons.dto';
-import { Person as PersonModel } from '@prisma/client';
+} from './dto/persons.dto';
+import { Person } from '@prisma/client';
 import { PersonsService } from './persons.service';
 
 @Controller()
@@ -28,7 +27,7 @@ export class PersonsController {
   async getPersonById(
     @Query()
     data: GetPersonByIdDto,
-  ): Promise<PersonProfile> {
+  ): Promise<Person> {
     const person = await this.personService.latestPerson(parseInt(data.id));
 
     if (!person) {
@@ -43,7 +42,7 @@ export class PersonsController {
   async getPersonVersioned(
     @Query()
     data: GetPersonByIdVersionDto,
-  ): Promise<PersonProfile> {
+  ): Promise<Person> {
     const person = await this.personService.person({
       id_version: {
         id: parseInt(data.id),
@@ -64,7 +63,7 @@ export class PersonsController {
   async register(
     @Body()
     data: CreatePersonDto,
-  ): Promise<PersonModel> {
+  ): Promise<Person> {
     const newPerson = await this.personService.createPerson(data);
 
     if (!newPerson) {
@@ -79,7 +78,7 @@ export class PersonsController {
   async deletePerson(
     @Body()
     data: DeletePersonByIdDto,
-  ): Promise<PersonModel> {
+  ): Promise<Person> {
     const tryDelete = await this.personService.deletePerson(data.id);
 
     if (tryDelete == undefined) {
@@ -99,7 +98,7 @@ export class PersonsController {
   async updatePerson(
     @Body()
     data: UpdatePersonDto,
-  ): Promise<PersonModel> {
+  ): Promise<Person> {
     const tryUpdate = this.personService.updatePerson({
       id: data.id,
       data: {
