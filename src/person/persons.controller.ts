@@ -18,13 +18,21 @@ import {
 } from './dto/persons.dto';
 import { Person } from './entities/person.entity';
 import { PersonsService } from './persons.service';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('person')
 @Controller()
 export class PersonsController {
   constructor(private readonly personService: PersonsService) {}
 
+  @ApiOkResponse({ type: Person })
+  @ApiNotFoundResponse({ status: 404, description: 'Unable to find person' })
   @Get('/personById')
   async getPersonById(
     @Query()
@@ -40,6 +48,8 @@ export class PersonsController {
     return person;
   }
 
+  @ApiOkResponse({ type: Person })
+  @ApiNotFoundResponse({ status: 404, description: 'Unable to find person' })
   @Get('/personVersioned')
   async getPersonVersioned(
     @Query()
@@ -77,6 +87,9 @@ export class PersonsController {
     return newPerson;
   }
 
+  @ApiCreatedResponse({ type: Person })
+  @ApiResponse({ status: 403, description: 'User has already been deleted' })
+  @ApiNotFoundResponse({ status: 404, description: 'Unable to find person' })
   @Delete('/person')
   async deletePerson(
     @Body()
@@ -97,6 +110,12 @@ export class PersonsController {
     return tryDelete;
   }
 
+  @ApiCreatedResponse({ type: Person })
+  @ApiNotFoundResponse({ status: 404, description: 'Unable to find person' })
+  @ApiResponse({
+    status: 403,
+    description: 'Unable to update person',
+  })
   @Put('/person')
   async updatePerson(
     @Body()
