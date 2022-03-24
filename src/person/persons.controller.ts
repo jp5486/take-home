@@ -16,9 +16,11 @@ import {
   UpdatePersonDto,
   DeletePersonByIdDto,
 } from './dto/persons.dto';
-import { Person } from '@prisma/client';
+import { Person } from './entities/person.entity';
 import { PersonsService } from './persons.service';
+import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('person')
 @Controller()
 export class PersonsController {
   constructor(private readonly personService: PersonsService) {}
@@ -59,6 +61,7 @@ export class PersonsController {
   }
 
   // create new person
+  @ApiCreatedResponse({ type: Person })
   @Post('/person')
   async register(
     @Body()

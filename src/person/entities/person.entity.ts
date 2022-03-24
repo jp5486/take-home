@@ -1,9 +1,21 @@
-// not used since I can pull the object from prisma
-export interface Person {
+import { ApiProperty } from '@nestjs/swagger';
+
+// used for swagger documentation
+export class Person {
   firstName: string;
+
+  @ApiProperty()
   lastName: string;
+
+  @ApiProperty()
   email: string;
+
+  @ApiProperty()
   address: string;
+
+  @ApiProperty()
   deletedAt: Date;
+
+  @ApiProperty()
   version: number;
 }
