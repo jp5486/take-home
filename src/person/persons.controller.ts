@@ -8,6 +8,7 @@ import {
   ForbiddenException,
   NotFoundException,
   Query,
+  ConflictException,
 } from '@nestjs/common';
 import {
   CreatePersonDto,
@@ -88,7 +89,7 @@ export class PersonsController {
   }
 
   @ApiCreatedResponse({ type: Person })
-  @ApiResponse({ status: 403, description: 'User has already been deleted' })
+  @ApiResponse({ status: 409, description: 'User has already been deleted' })
   @ApiNotFoundResponse({ status: 404, description: 'Unable to find person' })
   @Delete('/person')
   async deletePerson(
@@ -103,10 +104,13 @@ export class PersonsController {
     }
 
     // check for deletedAt field first
-    if (tryDelete == null) {
-      console.log('User has already been deleted');
-      throw new ForbiddenException();
+    if (tryDelete.deletedAt) {
+      throw new ConflictException({
+        status: 409,
+        message: 'User has already been deleted',
+      });
     }
+
     return tryDelete;
   }
 
